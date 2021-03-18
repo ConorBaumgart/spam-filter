@@ -1,0 +1,5 @@
+flask
+flask_cors 
+numpy
+nltk
+sklearn
