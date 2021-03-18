@@ -1,5 +1,6 @@
 from sklearn.model_selection import train_test_split
 import numpy as np
+import os
 from nltk.tokenize import word_tokenize
 from pull_data import ham_paths, spam_paths, get_email_content_bulk
 from preprocessing import clean_up_pipeline, clean_token_pipeline
@@ -66,8 +67,6 @@ x_test = [clean_up_pipeline(o) for o in x_test]
 x_test = [word_tokenize(o) for o in x_test]
 x_test = [clean_token_pipeline(o) for o in x_test]
 x_test = [" ".join(o) for o in x_test]
-
-
 # spam_train_index = [i for i,o in enumerate(y_train) if o == 1]
 # non_spam_train_index = [i for i,o in enumerate(y_train) if o == 0]
 
@@ -80,7 +79,7 @@ x_test = [" ".join(o) for o in x_test]
 
 x_train = [o.split(" ") for o in x_train]
 x_test = [o.split(" ") for o in x_test]
-
+# print(x_train)
 vectorizer = TfidfVectorizer()
 raw_sentences = [' '.join(o) for o in x_train]
 vectorizer.fit(raw_sentences)
@@ -91,15 +90,34 @@ def convert_to_feature(raw_tokenize_data):
 
 x_train_features = convert_to_feature(x_train)
 x_test_features = convert_to_feature(x_test)
-
-# vectorizer = CountVectorizer()
-# raw_sentences = [' '.join(o) for o in x_train]
-# vectorizer.fit(raw_sentences)
-
-# x_train_features = convert_to_feature(x_train)
-# x_test_features = convert_to_feature(x_test)
+# print("features")
+# print(x_train_features)
+# print(x_test_features)
 
 clf = GaussianNB()
 print(clf.fit(x_train_features.toarray(), y_train))
 print(clf.score(x_test_features.toarray(), y_test))
 print(clf.score(x_train_features.toarray(), y_train))
+
+vectorizer = CountVectorizer()
+raw_sentences = [' '.join(o) for o in x_train]
+vectorizer.fit(raw_sentences)
+
+x_train_features = convert_to_feature(x_train)
+x_test_features = convert_to_feature(x_test)
+print("features")
+print(x_train_features)
+print(x_test_features)
+
+
+clf = GaussianNB()
+print(clf.fit(x_train_features.toarray(), y_train))
+print(clf.score(x_test_features.toarray(), y_test))
+print(clf.score(x_train_features.toarray(), y_train))
+
+lgr = LogisticRegression()
+print(lgr.fit(x_train_features.toarray(), y_train))
+print(lgr.score(x_test_features.toarray(), y_test))
+print(lgr.score(x_train_features.toarray(), y_train))
+print(lgr.intercept_)
+print(lgr.coef_)

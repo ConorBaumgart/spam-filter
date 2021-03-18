@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: CloudFormation Infrastructure as Code Template for the BitRaider's Innovation Week project.
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  SpamCheckApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: v1
+
+  ValidateEmailFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: spam-filter/
+      Handler: app.app
+      Environment:
+        Variables:
+          API_STAGE_NAME: !Ref SpamCheckApi
+      Runtime: python3.8
+      Events:
+        ValidateEmail:
+          Type: Api
+          Properties:
+            Path: /validate_email
+            Method: post
+
+Outputs:
+  EmailValidationApi:
+    Description: "API Gateway endpoint used to determine whether an email is spam or ham."
+    Value: !Sub "https://${SpamCheckApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/validate_email/"
