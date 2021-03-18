@@ -39,13 +39,13 @@ def spamorham():
 
 
 def main():
-    path = '../../temp/spamham/'
+    path = '../data/'
 
-    easy_ham_paths = glob.glob(path+'easy_ham/*')
-    easy_ham_2_paths = glob.glob(path+'easy_ham_2/*')
-    hard_ham_paths = glob.glob(path+'hard_ham/*')
-    spam_paths = glob.glob(path+'spam/*')
-    spam_2_paths = glob.glob(path+'spam_2/*')
+    easy_ham_paths = glob.glob(path+'ham/easy_ham/*')
+    easy_ham_2_paths = glob.glob(path+'ham/easy_ham_2/*')
+    hard_ham_paths = glob.glob(path+'ham/hard_ham/*')
+    spam_paths = glob.glob(path+'spam/spam/*')
+    spam_2_paths = glob.glob(path+'spam/spam_2/*')
 
     def get_email_content(email_path):
         file = open(email_path,encoding='latin1')
